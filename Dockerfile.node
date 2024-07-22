@@ -1,0 +1,16 @@
+FROM node:17
+
+# Set working directory
+WORKDIR /var/www
+
+# Copy existing application directory contents
+COPY . .
+
+# Install dependencies
+RUN npm install
+
+# Expose port 5173
+EXPOSE 5173
+
+# Start the Vue development server
+CMD ["npm", "run", "dev"]

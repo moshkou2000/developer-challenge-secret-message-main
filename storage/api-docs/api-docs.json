@@ -1,0 +1,221 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Secret Message API REST",
+        "description": "It is in progress",
+        "version": "0.0.1"
+    },
+    "paths": {
+        "/api/messages": {
+            "get": {
+                "summary": "Retrieve all messages",
+                "operationId": "0b2c1752b3110ff76cb2d89dc667259d",
+                "parameters": [
+                    {
+                        "name": "sender",
+                        "in": "query",
+                        "description": "The sender of the messages",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "recipient",
+                        "in": "query",
+                        "description": "The recipient of the messages",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "decryption_key",
+                        "in": "query",
+                        "description": "The decryption key for the messages",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "messages": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "message": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "error": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "error": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Send a new message",
+                "operationId": "83bd4d27328bdca5d291cdfabc35605e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Hello World"
+                                    },
+                                    "sender": {
+                                        "type": "string",
+                                        "example": "sender@example.com"
+                                    },
+                                    "recipient": {
+                                        "type": "string",
+                                        "example": "recipient@example.com"
+                                    },
+                                    "expiry": {
+                                        "type": "integer",
+                                        "example": 60
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Message sent successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "identifier": {
+                                            "type": "string"
+                                        },
+                                        "decryption_key": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters"
+                    }
+                }
+            }
+        },
+        "/api/messages/{identifier}": {
+            "get": {
+                "summary": "Retrieve a single message",
+                "operationId": "2436e22c05a30efeba7a83be5039603e",
+                "parameters": [
+                    {
+                        "name": "identifier",
+                        "in": "path",
+                        "description": "The unique identifier of the message",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "decryption_key",
+                        "in": "query",
+                        "description": "The decryption key for the message",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid decryption key"
+                    },
+                    "410": {
+                        "description": "Message has expired"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a message",
+                "operationId": "46bc6a2da3f9564c60c50f0387139680",
+                "parameters": [
+                    {
+                        "name": "identifier",
+                        "in": "path",
+                        "description": "The unique identifier of the message to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Message deleted successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
